@@ -1,0 +1,178 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+# Usually these files are written by a python script from a template
+# before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Pyright type checker
+.pyright/
+
+# Cython debug symbols
+cython_debug/
+
+# VS Code
+.vscode/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+*.stackdump
+
+# Backup files
+*.bak
+*.swp
+*.swo
+*~
+*.tmp
+
+# MLOps specific
+data/
+output/
+logs/
+models/
+checkpoints/
+mlops_zoomcamp_course_final_project.egg-info/
+us-visa-permit/
+artifacts/
+
+# Ignore data files
+*.csv
+*.h5
+*.hdf5
+*.parquet
+*.pickle
+*.pkl
+
+# Ignore large files
+*.tar.gz
+*.zip
+*.tar
+*.gz
+*.bz2
+*.xz
+*.drawio
+
+# Ignore Jupyter Notebook output
+*.ipynb_checkpoints
+*.nb.html
+*.nb.json
+
+# Ignore Python virtual environments
+__pypackages__/
+poetry.lock
+.pdm.toml
+.pdm.lock
+pyproject.toml
+mid-term-proj/
+
+# Environment variable files
+.env
+*.env
+
+# Other IDEs and editors
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+.editorconfig
+
+# Ignore YAML configuration files
+# *.yaml
+*.yml
