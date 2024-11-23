@@ -3,10 +3,9 @@ import os
 import pandas as pd
 import numpy as np
 from typing import Union
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, StratifiedKFold, KFold, cross_val_score
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.model_selection import  RandomizedSearchCV, KFold, cross_val_score
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.base import BaseEstimator
 from src.exception import AppException
 from src.entity.config import ModelConfig, FeatureEngineeringConfig, ArtifactStore

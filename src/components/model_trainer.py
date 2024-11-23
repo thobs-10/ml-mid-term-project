@@ -9,7 +9,6 @@ from loguru import logger
 from src.components.component import Component
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.base import BaseEstimator
-from sklearn.pipeline import make_pipeline
 from src.utils.main_utils import get_tree_based_models
 from src.entity.config import FeatureEngineeringConfig, ArtifactStore
 
