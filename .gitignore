@@ -131,6 +131,7 @@ checkpoints/
 mlops_zoomcamp_course_final_project.egg-info/
 us-visa-permit/
 artifacts/
+catboost_info
 
 # Ignore data files
 *.csv
