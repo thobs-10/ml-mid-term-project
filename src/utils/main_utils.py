@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
-from typing import Tuple
+from typing import Tuple, List
 from sklearn.preprocessing import RobustScaler
 from sklearn.feature_selection import mutual_info_regression
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from lightgbm import LGBMRegressor
+from xgboost import XGBRegressor
 from scipy.stats import spearmanr
 import warnings
 warnings.filterwarnings('ignore')
@@ -14,6 +16,16 @@ def get_statistical_properties(df:pd.DataFrame, column: str) -> Tuple[float, flo
     Q3 = df[column].quantile(0.75)
     IQR = Q3 - Q1
     return Q1, Q3, IQR
+
+def get_tree_based_models() -> list:
+    """Return a list of tree-based models."""
+    return [
+        RandomForestRegressor(),
+        GradientBoostingRegressor(),
+        # CatBoostRegressor(),
+        XGBRegressor(),
+        LGBMRegressor()
+    ]
 
 class MixedTypeFeatureSelector:
     """
@@ -35,6 +47,27 @@ class MixedTypeFeatureSelector:
             'Snowfall (cm)', 
             'year'
         ]
+    
+    def _clip_values(self,X:pd.DataFrame, col: str) -> None:
+        """
+        Clip the values to avoid negative scores and zero importance.
+        """
+        # Clip extreme values
+        q1 = X[col].quantile(0.01)
+        q3 = X[col].quantile(0.99)
+        X[col] = X[col].clip(q1, q3)
+    
+    def _fill_inf_points(self, X:pd.DataFrame, col:str) -> pd.DataFrame:
+        X[col] = X[col].replace(np.inf, X[col].replace([np.inf, -np.inf], np.nan).max())
+        X[col] = X[col].replace(-np.inf, X[col].replace([np.inf, -np.inf], np.nan).min())
+        X[col] = X[col].fillna(X[col].median())
+        return X
+
+    def _scale_data(self,X:pd.DataFrame, numerical_cols: List[str]) -> None:
+        cols_to_scale = [col for col in numerical_cols if col not in self.excluded_cols]
+        if cols_to_scale:
+            scaler = RobustScaler()
+            X[cols_to_scale] = scaler.fit_transform(X[cols_to_scale])
         
     def fit(self, X: pd.DataFrame, y: pd.Series):
         """
@@ -99,20 +132,23 @@ class MixedTypeFeatureSelector:
                 X_processed[col] = X_processed[col].fillna(median_val)
                 
                 # Clip extreme values
-                q1 = X_processed[col].quantile(0.01)
-                q3 = X_processed[col].quantile(0.99)
-                X_processed[col] = X_processed[col].clip(q1, q3)
+                # q1 = X_processed[col].quantile(0.01)
+                # q3 = X_processed[col].quantile(0.99)
+                # X_processed[col] = X_processed[col].clip(q1, q3)
+                self._clip_values(X_processed, col)
         
-        cols_to_scale = [col for col in numerical_cols if col not in self.excluded_cols]
-        if cols_to_scale:
-            scaler = RobustScaler()
-            X_processed[cols_to_scale] = scaler.fit_transform(X_processed[cols_to_scale])
+        # cols_to_scale = [col for col in numerical_cols if col not in self.excluded_cols]
+        # if cols_to_scale:
+        #     scaler = RobustScaler()
+        #     X_processed[cols_to_scale] = scaler.fit_transform(X_processed[cols_to_scale])
+        self._scale_data(X_processed, numerical_cols)
 
         for col in self.excluded_cols:
             if col in X_processed.columns:
-                X_processed[col] = X_processed[col].replace(np.inf, X_processed[col].replace([np.inf, -np.inf], np.nan).max())
-                X_processed[col] = X_processed[col].replace(-np.inf, X_processed[col].replace([np.inf, -np.inf], np.nan).min())
-                X_processed[col] = X_processed[col].fillna(X_processed[col].median())
+                # X_processed[col] = X_processed[col].replace(np.inf, X_processed[col].replace([np.inf, -np.inf], np.nan).max())
+                # X_processed[col] = X_processed[col].replace(-np.inf, X_processed[col].replace([np.inf, -np.inf], np.nan).min())
+                # X_processed[col] = X_processed[col].fillna(X_processed[col].median())
+                X_processed = self._fill_inf_points(X_processed, col)
         
         return X_processed
     

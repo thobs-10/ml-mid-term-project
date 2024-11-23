@@ -1,21 +1,19 @@
 from src.exception import AppException
 
 from src.components.feature_engineering import FeatureEngineering
-from src.entity.config import FeatureEngineeringConfig, DataProcessing, ArtifactStore
+from src.entity.config import FeatureEngineeringConfig, DataProcessing
 
 class FeatureEngineeringPipeline:
     def __init__(self, data_source: DataProcessing = DataProcessing(),
-                 data_store: FeatureEngineeringConfig = FeatureEngineeringConfig(),
-                 artifact_store: ArtifactStore = ArtifactStore()):
+                 data_store: FeatureEngineeringConfig = FeatureEngineeringConfig()):
         self.data_source = data_source
         self.data_store = data_store
-        self.artifact_store = artifact_store
+
     
     def run_feature_engineering(self):
         try:
             feature_engineering = FeatureEngineering(self.data_source,
-                                                     self.data_store,
-                                                     self.artifact_store)
+                                                     self.data_store)
             df = feature_engineering.load_data()
             df = feature_engineering.feature_extraction(df)
             df = feature_engineering.feature_transformation(df)

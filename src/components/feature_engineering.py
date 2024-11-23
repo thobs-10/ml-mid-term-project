@@ -15,11 +15,10 @@ from src.exception  import AppException
 
 class FeatureEngineering(Component):
     def __init__(self, data_source: DataProcessing= DataProcessing(),
-                 data_store: FeatureEngineeringConfig= FeatureEngineeringConfig(),
-                 artifact_store: ArtifactStore= ArtifactStore()):
+                 data_store: FeatureEngineeringConfig= FeatureEngineeringConfig()):
         self.data_source = data_source
         self.data_store = data_store
-        self.artifact_store = artifact_store
+        # self.artifact_store = artifact_store
         self.excluded_cols = [
             'Wind speed (m/s)', 
             'Solar Radiation (MJ/m2)',
@@ -91,30 +90,30 @@ class FeatureEngineering(Component):
                                                         test_size=0.25, random_state=42)
         return X_train, X_val, X_test, y_train, y_val, y_test
     
-    def _clean_infinity_values(self, X: pd.DataFrame) -> pd.DataFrame:
-        for col in self.excluded_cols:
-            if col in X.columns:
-                X[col] = X[col].replace(np.inf, X[col].replace([np.inf, -np.inf], np.nan).max())
-                X[col] = X[col].replace(-np.inf, X[col].replace([np.inf, -np.inf], np.nan).min())
-                X[col] = X[col].fillna(X[col].median())
+    # def _clean_infinity_values(self, X: pd.DataFrame) -> pd.DataFrame:
+    #     for col in self.excluded_cols:
+    #         if col in X.columns:
+    #             X[col] = X[col].replace(np.inf, X[col].replace([np.inf, -np.inf], np.nan).max())
+    #             X[col] = X[col].replace(-np.inf, X[col].replace([np.inf, -np.inf], np.nan).min())
+    #             X[col] = X[col].fillna(X[col].median())
         
-        return X
+    #     return X
         
-    def feature_scaling(self, X_train:pd.DataFrame,
-                    X_valid: pd.DataFrame)-> Tuple[Union[pd.DataFrame, np.ndarray],
-                                                   Union[pd.DataFrame, np.ndarray],
-                                                   StandardScaler]:
-        logger.info("feature scaling process ...")
-        scaler = MinMaxScaler()
-        X_train = self._clean_infinity_values(X_train)
-        scaling_cols = [col for col in X_train.columns if col not in self.excluded_cols]
-        X_train_scaled = scaler.fit_transform(X_train[scaling_cols])
-        X_valid_scaled = scaler.transform(X_valid[scaling_cols])
-        logger.debug("feature scaling process done successfully")
-        return X_train_scaled, X_valid_scaled, scaler
+    # def feature_scaling(self, X_train:pd.DataFrame,
+    #                 X_valid: pd.DataFrame)-> Tuple[Union[pd.DataFrame, np.ndarray],
+    #                                                Union[pd.DataFrame, np.ndarray],
+    #                                                StandardScaler]:
+    #     logger.info("feature scaling process ...")
+    #     scaler = MinMaxScaler()
+    #     X_train = self._clean_infinity_values(X_train)
+    #     scaling_cols = [col for col in X_train.columns if col not in self.excluded_cols]
+    #     X_train_scaled = scaler.fit_transform(X_train[scaling_cols])
+    #     X_valid_scaled = scaler.transform(X_valid[scaling_cols])
+    #     logger.debug("feature scaling process done successfully")
+    #     return X_train_scaled, X_valid_scaled, scaler
     
     def save_data(self, X_train: pd.DataFrame, X_val: pd.DataFrame, X_test: pd.DataFrame, 
-                  y_train: pd.Series, y_val: pd.Series, y_test: pd.Series,filepath: str) -> None:
+                  y_train: pd.Series, y_val: pd.Series, y_test: pd.Series) -> None:
         logger.info("saving data ...")
         filepath = os.path.join(self.data_store.feature_engineered_data_path)
         os.makedirs(filepath, exist_ok=True)
@@ -130,13 +129,13 @@ class FeatureEngineering(Component):
             logger.error("Error saving data to %s", filepath)
             raise AppException(f"Failed to save data to {filepath}.", e)
         
-    def save_artifact(self, scaler: StandardScaler)-> None:
-        logger.info("saving artifacts...")
-        filepath = os.path.join(self.artifact_store.artifacts_path)
-        os.makedirs(filepath, exist_ok=True)
-        try:
-            joblib.dump(scaler, os.path.join(filepath, "scaler.joblib"))
-            logger.debug("saving artifacts done successfully")
-        except Exception as e:
-            logger.error("Error saving artifacts to %s", filepath)
-            raise AppException(f"Failed to save artifacts to {filepath}.", e)
+    # def save_artifact(self, scaler: StandardScaler)-> None:
+    #     logger.info("saving artifacts...")
+    #     filepath = os.path.join(self.artifact_store.artifacts_path)
+    #     os.makedirs(filepath, exist_ok=True)
+    #     try:
+    #         joblib.dump(scaler, os.path.join(filepath, "scaler.joblib"))
+    #         logger.debug("saving artifacts done successfully")
+    #     except Exception as e:
+    #         logger.error("Error saving artifacts to %s", filepath)
+    #         raise AppException(f"Failed to save artifacts to {filepath}.", e)

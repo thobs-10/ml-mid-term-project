@@ -24,13 +24,18 @@ class FeatureEngineeringConfig:
     
 @dataclass
 class ModelTraining:
-    model_data_path : str
-    model_output_path : str
-    feature_engineered_data : FeatureEngineeringConfig = field(default_factory=FeatureEngineeringConfig)
+    model_path : str = os.getenv('MODEL_ARTIFACT_PATH')
+    # model_output_path : str = os.getenv('MODEL_OUTPUT_PATH')
     
-    def combine_data_fullpath(self):
-        self.model_data_path = self.feature_engineered_data.combine_full_path()
-        return self.model_data_path
-
+@dataclass
+class ModelConfig:
+    hyperparameters : dict = field(default_factory=lambda:{
+    # "max_depth": [1, 3, 6, 8, 10],
+    "n_estimators": [50, 100, 150, 250, 300], 
+    # "loss" : ['squared_error', 'absolute_error', 'huber', 'quantile'],
+    "min_samples_split": [2, 4, 6, 8, 10],
+    "min_samples_leaf": [1, 2, 3, 4, 5],
+    # "max_features": ['auto', 'sqrt', 'log2']
+})
 
 
