@@ -1,6 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
-from pydantic import BaseModel
-from typing import List, Optional, Union, Dict, Literal, Any
+from fastapi import FastAPI, status
 from dotenv import load_dotenv
 import joblib
 import os
