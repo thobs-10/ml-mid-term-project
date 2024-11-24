@@ -67,7 +67,6 @@ class HyperparameterTuning:
             raise AppException("Failed to load scaler", e)
         
     def save_pipelined_model(self,model: BaseEstimator):
-        # scaler = self.load_scaler()
         model_pipeline  = make_pipeline( model)
         staged_model_path = os.path.join(self.model_source.artifacts_path, 'staged_model')
         os.makedirs(staged_model_path, exist_ok= True)
