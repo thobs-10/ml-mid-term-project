@@ -65,7 +65,7 @@ class ModelTraining(Component):
         logger.debug("feature scaling process done successfully")
         return X_train_scaled, X_valid_scaled, scaler
 
-    def train_model(self, X_train_scaled:np.ndarray, y_train:np.ndarray) -> None:
+    def train_model(self, X_train_scaled:pd.DataFrame, y_train:pd.DataFrame) -> None:
         """train tree based models only"""
         logger.info("training models ...")
         X_train_scaled = self._clean_infinity_values(X_train_scaled)
@@ -75,7 +75,7 @@ class ModelTraining(Component):
             self.models.append(model)
         logger.debug("training process done successfully")
 
-    def validate_model(self, X_val_scaled: np.ndarray, y_val: pd.DataFrame) -> None:
+    def validate_model(self, X_val_scaled: pd.DataFrame, y_val: pd.DataFrame) -> None:
         """validate tree based models only"""
         logger.info("validating models ...")
         X_val_scaled = self._clean_infinity_values(X_val_scaled)
