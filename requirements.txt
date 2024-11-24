@@ -2,7 +2,7 @@ annotated-types==0.7.0
 anyio==4.6.2.post1
 appnope==0.1.4
 asttokens==2.4.1
--e git+https://github.com/thobs-10/ml-mid-term-project.git@eaf9cdfa1ac34f9e0e61a1de2f60e70329d94859#egg=Bike_Sharing_Demand_Predictions
+-e .
 catboost==1.2.7
 click==8.1.7
 cloudpickle==3.1.0
