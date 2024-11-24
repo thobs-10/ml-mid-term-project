@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import sys
 from loguru import logger
 
 from src.components.component import Component
@@ -22,8 +23,11 @@ class Preprocesing(Component):
             logger.debug(f"Successfully loaded data from {self.data_source.raw_data_path}")
             return df
         except FileNotFoundError as e:
-            logger.error(f"Failed to load data from {self.data_source.raw_data_path}.")
-            raise AppException(f"Failed to load data from {self.data_source.raw_data_path}.", e)
+            error_message = f"Failed to load data from {self.data_source.raw_data_path}"
+            raise AppException(
+                error_message=error_message,
+                error_detail=sys
+            )
     
     def handle_categorical_types(self, df:pd.DataFrame)-> pd.DataFrame:
         logger.info('Handling categorical datatypes...')
@@ -58,9 +62,9 @@ class Preprocesing(Component):
         features_with_na=[features for features in df.columns if df[features].isnull().sum()>=1]
         for feature in features_with_na:
             if df[feature].dtype == 'categorical':
-                df[feature].fillna(df[feature].mode()[0], inplace=True)
+                df[feature] = df[feature].fillna(df[feature].mode()[0], inplace=True)
             else:
-                df[feature].fillna(df[feature].mean())
+                df[feature] = df[feature].fillna(df[feature].mean())
         logger.debug("Handled missing values successfully")
         return df
     
@@ -84,4 +88,8 @@ class Preprocesing(Component):
             df.to_csv(os.path.join(filepath, "processed_data.csv"), index=False)
             logger.debug("Saved processed data successfully")
         except Exception as e:
-            raise AppException(f"Failed to save data to {self.data_source.processed_data_path}.", e)
+            error_message = f"Failed to load data from {self.data_source.raw_data_path}"
+            raise AppException(
+                error_message=error_message,
+                error_detail=sys
+            )
