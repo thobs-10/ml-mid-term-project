@@ -176,4 +176,4 @@ mid-term-proj/
 
 # Ignore YAML configuration files
 # *.yaml
-*.yml
+# *.yml
