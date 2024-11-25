@@ -64,7 +64,7 @@ The solution integrates the machine learning model into the Seoul bike-sharing s
 | Reproducibility                       | ✅          |
 | Dependency and Environment Management | ✅          |
 | Containerization                      | ✅          |
-| Cloud Deployment                      | ✅          |
+| Cloud Deployment                      | ❎          |
 
 ---
 
@@ -72,7 +72,16 @@ The solution integrates the machine learning model into the Seoul bike-sharing s
 
 1. **Prepare the Dataset**  
    - Download the data from [insert link here].  
-   - Create a folder named `data` and inside it, a subfolder named `raw`. Paste the data into the `raw` folder.
+   - Create a folder named `data` in the root/parent folder and inside it, a subfolder named `raw`. Paste the data into the `raw` folder.
+   - Create a `.env` file in the root/parent folder. Add the following:
+    ```
+    RAW_PATH_FILE="data/raw_data/SeoulBikeData.csv"
+    PROCESSED_PATH_FILE="data/processed_data/"
+    ARTIFACTS_PATH="artifacts"
+    FEATURE_ENGINEERED_DATA_PATH="data/feature_store"
+    MODEL_OUTPUT_PATH="artifacts/model"
+    STAGED_MODEL_PATH="artifacts/staged_model"
+    ```
 
 2. **Set Up Environment**  
    - Ensure you have Python 3.10 installed (recommended using `pyenv`).
@@ -120,8 +129,8 @@ The solution integrates the machine learning model into the Seoul bike-sharing s
 As an added feature, the deployment process is automated using GitHub Actions. This enables seamless deployment to DockerHub, allowing you to pull and run the container directly without manual setup:
 
 ```bash
-docker pull <dockerhub_username>/fastapi-ml-app
-docker run -p 8000:8000 <dockerhub_username>/fastapi-ml-app
+docker pull thobela10/project-app:latest
+docker run -p 8000:8000 thobela10/project-app
 ```
 
 Enjoy real-time predictions for bike demand! 🚴🏽‍♂️
