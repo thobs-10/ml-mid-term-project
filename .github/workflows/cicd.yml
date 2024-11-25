@@ -34,7 +34,9 @@ jobs:
           pip install -r requirements.txt
         
       - name: Run tests
-        run: pytest src/tests/
+        run: |
+          source venv/bin/activate
+          pytest src/tests/
     
   push-and-publish:
     needs: install-and-test
